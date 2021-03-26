@@ -31,32 +31,29 @@ public interface BattleField {
      * del campo di battaglia o sono numeri negativi, l'eccezione {@link ArrayIndexOutOfBoundsException}
      * verr&agrave; generata.
      *
-     * @param row riga della posizione
-     * @param column colonna della posizione
+     * @param fieldPosition posizione dove aggiungere la nave.
      * @return la nave nella posizione data, null se nessuna nave &egrave; nella posizione.
      */
-    Ship shipAt(int row, int column);
+    Ship shipAt(FieldPosition fieldPosition);
 
 
     /**
      * Verifica se una data posizione nel campo di battaglia sia libera o meno.
      *
-     * @param row riga della posizione
-     * @param column colonna della posizione
+     * @param fieldPosition posizione dove aggiungere la nave.
      * @return true se la posizione nel campo di battaglia &egrave; libera, false altrimenti.
      */
-    default boolean isFree(int row, int column) {
-        return shipAt(row,column) == null;
+    default boolean isFree(FieldPosition fieldPosition) {
+        return shipAt(fieldPosition) == null;
     }
 
     /**
      * Effetuo un lancio nella posizione indicata.
      *
-     * @param row riga del lancio.
-     * @param column colonna del lancio.
+     * @param fieldPosition posizione dove aggiungere la nave.
      * @return risutlato del lancio.
      */
-    ShotResult shotAt(int row, int column);
+    ShotResult shotAt(FieldPosition fieldPosition);
 
     /**
      * Restituisce la larghezza del campo.
@@ -75,11 +72,10 @@ public interface BattleField {
     /**
      * Restituisce lo stato di una cella
      *
-     * @param row riga della cella
-     * @param column colonna della cella
+     * @param fieldPosition posizione dove aggiungere la nave.
      * @return stato della cella
      */
-    ShotResult status(int row, int column);
+    ShotResult result(FieldPosition fieldPosition);
 
 
 }

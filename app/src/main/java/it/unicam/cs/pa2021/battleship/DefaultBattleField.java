@@ -10,6 +10,7 @@ public class DefaultBattleField implements BattleField {
     private static final int DEFAULT_HEIGHT = DEFAULT_SIZE;
 
     private final Ship[][] field;
+    private boolean[][] positionFlag;
     private final int width;
     private final int height;
 
@@ -27,7 +28,8 @@ public class DefaultBattleField implements BattleField {
      * @param height altezza del campo di battaglia.
      */
     public DefaultBattleField(int width, int height) {
-        this.field = new Ship[width][height];
+        this.field = new Ship[height][width];
+        this.positionFlag = new boolean[height][width];
         this.width = width;
         this.height = height;
     }
@@ -44,8 +46,7 @@ public class DefaultBattleField implements BattleField {
     }
 
     private void addShip(Ship ship, FieldPosition[] positions) {
-        for (FieldPosition p: positions
-             ) {
+        for (FieldPosition p: positions) {
             this.field[p.getRow()][p.getColumn()] = ship;
         }
     }
@@ -63,17 +64,27 @@ public class DefaultBattleField implements BattleField {
         if ((p.getColumn()<0)||p.getColumn()>=width()||(p.getRow()<0)||(p.getRow()>=height())) {
             return false;
         }
-        return isFree(p.getRow(),p.getColumn());
+        return isFree(p);
     }
 
     @Override
-    public Ship shipAt(int row, int column) {
-        return this.field[row][column];
+    public Ship shipAt(FieldPosition fieldPosition) {
+        return this.field[fieldPosition.getRow()][fieldPosition.getColumn()];
     }
 
     @Override
-    public ShotResult shotAt(int row, int column) {
-        return null;
+    public ShotResult shotAt(FieldPosition fieldPosition) {
+        Ship ship = shipAt(fieldPosition);
+        recordShotAt(fieldPosition);
+        if (ship == null) {
+            return ShotResult.MISS;
+        } else {
+            return ship.shotAt(fieldPosition);
+        }
+    }
+
+    private void recordShotAt(FieldPosition fieldPosition) {
+        this.positionFlag[fieldPosition.getRow()][fieldPosition.getColumn()] = true;
     }
 
     @Override
@@ -87,8 +98,20 @@ public class DefaultBattleField implements BattleField {
     }
 
     @Override
-    public ShotResult status(int row, int column) {
+    public ShotResult result(FieldPosition fieldPosition) {
+        if (hasBeenUsed(fieldPosition)) {
+            Ship ship = shipAt(fieldPosition);
+            if (ship == null) {
+                return ShotResult.MISS;
+            } else {
+                return ship.status(fieldPosition);
+            }
+        }
         return null;
+    }
+
+    private boolean hasBeenUsed(FieldPosition fieldPosition) {
+        return this.positionFlag[fieldPosition.getRow()][fieldPosition.getColumn()];
     }
 
 }

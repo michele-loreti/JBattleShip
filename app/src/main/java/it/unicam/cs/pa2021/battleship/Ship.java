@@ -40,4 +40,19 @@ public interface Ship {
      */
     String getName();
 
+    /**
+     * Restituisce il risultato di un colpo ricevuto alla data posizione.
+     *
+     * @param fieldPosition posizione del colpo.
+     * @return risultato del colpo.
+     */
+    ShotResult shotAt(FieldPosition fieldPosition);
+
+    /**
+     * Restituisce lo stato della nave nella posizione data.
+     *
+     * @param fieldPosition posizione nel campo.
+     * @return stato della nave nella posizione data.
+     */
+    ShotResult status(FieldPosition fieldPosition);
 }
