@@ -8,6 +8,6 @@
  */
 
 rootProject.name = 'JBattleShip'
-include('app', 'api', 'players', 'players:randomplayer', 'players:sequentialplayer')
+include('app', 'api', 'players', 'players:randomplayer', 'players:sequentialplayer'/* 'players:nomecognome */)
 include 'players'
 
